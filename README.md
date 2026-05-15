@@ -42,15 +42,19 @@ implementation.
 
 ## Where to start
 
-Six entries shipped so far, ordered by the path that builds
-understanding fastest:
+Thirteen entries shipped so far. New readers benefit from this
+path — it builds understanding from local-self outward:
 
 1. [`netinfo`](netinfo.md) — where am I on the network right now
 2. [`ping`](ping.md) — is this host reachable, what shape is the latency
 3. [`trace`](trace.md) — what's the path between me and that host
-4. [`geoip`](geoip.md) — where in the world is an IP, offline
-5. [`scan`](scan.md) — what ports are open on this target
-6. [`meta`](meta.md) — what metadata is leaking from this document or image
+4. [`scan`](scan.md) — what ports are open on this target
+5. [`banner`](banner.md) — what's actually listening on one of those ports
+6. [`lan-scan`](lan-scan.md) — sweep my LAN for live hosts
+7. [`geoip`](geoip.md) — where in the world is an IP, offline
+8. [`meta`](meta.md) — what metadata is leaking from this document or image
+
+The rest are in the index below, grouped by category.
 
 Each entry follows the same structure: lead paragraph + usage,
 *What it does*, *What it answers*, *How it works* (with code
@@ -64,16 +68,22 @@ reading*.
 
 ### Reachability & transport
 Probing whether a target is reachable, how the latency behaves,
-and what's listening.
+and what's actually listening on a port.
 
 - [`ping`](ping.md) — ICMP latency probe with sparkline rendering
 - [`trace`](trace.md) — path discovery with geolocation
-- [`scan`](scan.md) — TCP port scanner with banner grab
+- [`banner`](banner.md) — single-port banner grab with probe, TLS, and hex dump
 
 ### Discovery
-Local network state and what's running where.
+Local-network and host-level enumeration — what's online, what
+services are running, what addresses have hostnames.
 
 - [`netinfo`](netinfo.md) — local network introspection with live sparklines
+- [`scan`](scan.md) — TCP port scanner with banner grab
+- [`lan-scan`](lan-scan.md) — local subnet sweep with vendor identification
+- [`discover`](discover.md) — TCP-ping service inventory across a subnet
+- [`reverse-dns`](reverse-dns.md) — PTR record sweep across a subnet
+- [`wifi`](wifi.md) — wireless network scanner with band, channel, security, vendor
 
 ### Identification
 Who owns this IP, where is it, what AS does it belong to. Mostly
@@ -81,11 +91,18 @@ offline lookups against bundled databases.
 
 - [`geoip`](geoip.md) — offline IP geolocation
 
+### Web app analysis
+Inspecting websites from the outside — what's running them, what
+they expose, what their security posture looks like.
+
+- [`tech`](tech.md) — web technology fingerprinter
+
 ### File & data forensics
 Reading what's inside a file — metadata, embedded artifacts,
-integrity properties.
+integrity properties, hidden payloads.
 
 - [`meta`](meta.md) — document and image metadata extraction
+- [`stego`](stego.md) — LSB steganography for PNG carriers
 
 ---
 
@@ -95,18 +112,18 @@ Cathedral ships with more tools than the cookbook currently
 documents. Entries are added in rough order of how often the tool
 is reached for in real workflows. Categories already half-built:
 
-- **Reachability & transport** — `banner`, `discover`, `ssh-audit`,
-  `ports`, `conns`
-- **Discovery** — `lan-scan`, `wifi`, `sniff`, `reverse-dns`
-- **Identification** — `asn`, `whois`, `dns`, `dnsbl`
-- **Web app analysis** — `headers`, `tech`, `waf`, `cookies`, `fav`,
+- **Reachability & transport** — `ssh-audit`
+- **Discovery** — `ports`, `conns`, `sniff`, `sysmon`
+- **Identification** — `asn`, `whois`, `dns`, `dnsbl`, `oui`
+- **Web app analysis** — `headers`, `waf`, `cookies`, `fav`,
   `http`, `recon`
 - **Email & certificates** — `spf`, `dmarc`, `mx-rep`, `ssl`, `crt`,
   `subs`
 - **Crypto utilities** — `hash`, `pwned`, `entropy`, `bcrypt`,
   `argon2`, `crypt`, `jwt`
-- **File & data forensics** — `stego`, `imgforensic` *(planned)*,
+- **File & data forensics** — `imgforensic` *(planned)*,
   `browser` *(planned)*
+- **Filesystem** — `ls`, `stat`, `tree`
 
 The offensive-tooling section lands later — `crack` (multi-mode
 dictionary attack), `sqli` (SQL injection detection), `dirscan`
@@ -157,8 +174,8 @@ on GitHub for rendered tables, syntax-highlighted code, and
 auto-linked cross-references between entries.
 
 ```
-git clone <repo-url>
-cd cathedral-cookbook
+git clone https://github.com/crowned-phoenix/cathedral.git
+cd cathedral
 $EDITOR netinfo.md
 ```
 
