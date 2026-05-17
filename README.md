@@ -42,7 +42,7 @@ implementation.
 
 ## Where to start
 
-Thirteen entries shipped so far. New readers benefit from this
+Sixteen entries shipped so far. New readers benefit from this
 path — it builds understanding from local-self outward:
 
 1. [`netinfo`](netinfo.md) — where am I on the network right now
@@ -73,12 +73,16 @@ and what's actually listening on a port.
 - [`ping`](ping.md) — ICMP latency probe with sparkline rendering
 - [`trace`](trace.md) — path discovery with geolocation
 - [`banner`](banner.md) — single-port banner grab with probe, TLS, and hex dump
+- [`ssh-audit`](ssh-audit.md) — SSH server algorithm posture grader
 
 ### Discovery
 Local-network and host-level enumeration — what's online, what
-services are running, what addresses have hostnames.
+services are running, what addresses have hostnames, what
+conversations are happening on this machine.
 
 - [`netinfo`](netinfo.md) — local network introspection with live sparklines
+- [`ports`](ports.md) — local listening sockets and the processes that own them
+- [`conns`](conns.md) — active TCP connections with owning process
 - [`scan`](scan.md) — TCP port scanner with banner grab
 - [`lan-scan`](lan-scan.md) — local subnet sweep with vendor identification
 - [`discover`](discover.md) — TCP-ping service inventory across a subnet
@@ -112,8 +116,7 @@ Cathedral ships with more tools than the cookbook currently
 documents. Entries are added in rough order of how often the tool
 is reached for in real workflows. Categories already half-built:
 
-- **Reachability & transport** — `ssh-audit`
-- **Discovery** — `ports`, `conns`, `sniff`, `sysmon`
+- **Discovery** — `sniff`, `sysmon`
 - **Identification** — `asn`, `whois`, `dns`, `dnsbl`, `oui`
 - **Web app analysis** — `headers`, `waf`, `cookies`, `fav`,
   `http`, `recon`
