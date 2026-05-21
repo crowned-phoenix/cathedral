@@ -42,7 +42,7 @@ implementation.
 
 ## Where to start
 
-Sixteen entries shipped so far. New readers benefit from this
+Thirty-one entries shipped so far. New readers benefit from this
 path — it builds understanding from local-self outward:
 
 1. [`netinfo`](netinfo.md) — where am I on the network right now
@@ -86,20 +86,46 @@ conversations are happening on this machine.
 - [`scan`](scan.md) — TCP port scanner with banner grab
 - [`lan-scan`](lan-scan.md) — local subnet sweep with vendor identification
 - [`discover`](discover.md) — TCP-ping service inventory across a subnet
-- [`reverse-dns`](reverse-dns.md) — PTR record sweep across a subnet
 - [`wifi`](wifi.md) — wireless network scanner with band, channel, security, vendor
 
-### Identification
-Who owns this IP, where is it, what AS does it belong to. Mostly
-offline lookups against bundled databases.
+### DNS & identity
+Resolving names to addresses and addresses back to names — the
+forward and reverse halves of the public DNS view of a target.
 
+- [`dns`](dns.md) — forward DNS lookups for A/AAAA/MX/NS/TXT/CNAME
+- [`reverse-dns`](reverse-dns.md) — PTR record sweep across a subnet
+
+### Identification
+Who owns this name or address, where is it, what AS does it belong
+to. Live registry queries and offline geolocation lookups.
+
+- [`whois`](whois.md) — registry and ownership lookup for domains and IPs
+- [`asn`](asn.md) — BGP-table attribution for IPs and hostnames
 - [`geoip`](geoip.md) — offline IP geolocation
 
 ### Web app analysis
 Inspecting websites from the outside — what's running them, what
 they expose, what their security posture looks like.
 
+- [`http`](http.md) — terminal HTTP client for recon and probes
+- [`recon`](recon.md) — breadth-first HTTP reconnaissance for one target
+- [`dirscan`](dirscan.md) — concurrent wordlist-driven path enumerator
+- [`headers`](headers.md) — security-header audit with letter grade
+- [`cookies`](cookies.md) — Set-Cookie attribute audit
+- [`waf`](waf.md) — Web Application Firewall fingerprinting
+- [`fav`](fav.md) — favicon hashing for infrastructure pivot
 - [`tech`](tech.md) — web technology fingerprinter
+
+### Email & certificates
+Mail-authentication policy, MX-host reputation, TLS certificate
+posture — the cross-layer view that ties domain authority to
+mail and HTTPS trust.
+
+- [`spf`](spf.md) — Sender Policy Framework evaluator with grade A→F
+- [`dmarc`](dmarc.md) — DMARC policy evaluator with grade A→F
+- [`mx-rep`](mx-rep.md) — MX-host reputation across DNS blocklists
+- [`ssl`](ssl.md) — TLS handshake and certificate-chain inspection
+- [`crt`](crt.md) — Certificate Transparency log search for subdomain discovery
 
 ### File & data forensics
 Reading what's inside a file — metadata, embedded artifacts,
@@ -117,11 +143,9 @@ documents. Entries are added in rough order of how often the tool
 is reached for in real workflows. Categories already half-built:
 
 - **Discovery** — `sniff`, `sysmon`
-- **Identification** — `asn`, `whois`, `dns`, `dnsbl`, `oui`
-- **Web app analysis** — `headers`, `waf`, `cookies`, `fav`,
-  `http`, `recon`
-- **Email & certificates** — `spf`, `dmarc`, `mx-rep`, `ssl`, `crt`,
-  `subs`
+- **DNS & identity** — `dnsbl`
+- **Identification** — `oui`
+- **Email & certificates** — `subs`
 - **Crypto utilities** — `hash`, `pwned`, `entropy`, `bcrypt`,
   `argon2`, `crypt`, `jwt`
 - **File & data forensics** — `imgforensic` *(planned)*,
@@ -129,10 +153,9 @@ is reached for in real workflows. Categories already half-built:
 - **Filesystem** — `ls`, `stat`, `tree`
 
 The offensive-tooling section lands later — `crack` (multi-mode
-dictionary attack), `sqli` (SQL injection detection), `dirscan`
-(path enumeration). Those entries are longer because the
-authorized-testing posture matters more and the technique behind
-each is denser.
+dictionary attack) and `sqli` (SQL injection detection). Those
+entries are longer because the authorized-testing posture matters
+more and the technique behind each is denser.
 
 ---
 
