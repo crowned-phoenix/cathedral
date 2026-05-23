@@ -42,7 +42,7 @@ implementation.
 
 ## Where to start
 
-Thirty-one entries shipped so far. New readers benefit from this
+Thirty-two entries shipped so far. New readers benefit from this
 path — it builds understanding from local-self outward:
 
 1. [`netinfo`](netinfo.md) — where am I on the network right now
@@ -102,6 +102,7 @@ to. Live registry queries and offline geolocation lookups.
 - [`whois`](whois.md) — registry and ownership lookup for domains and IPs
 - [`asn`](asn.md) — BGP-table attribution for IPs and hostnames
 - [`geoip`](geoip.md) — offline IP geolocation
+- [`locate`](locate.md) — address-to-satellite-view with phosphor map render
 
 ### Web app analysis
 Inspecting websites from the outside — what's running them, what
@@ -138,24 +139,33 @@ integrity properties, hidden payloads.
 
 ## What's planned
 
-Cathedral ships with more tools than the cookbook currently
-documents. Entries are added in rough order of how often the tool
-is reached for in real workflows. Categories already half-built:
+Cathedral ships with more tools than the cookbook currently documents,
+and several planned tools are not yet built. The full picture — which
+shipped tools are still awaiting their entries, what each planned tool
+will cover, and where new categories (crypto utility belt, filesystem,
+offensive tooling) fit — lives in [`roadmap.md`](roadmap.md).
 
-- **Discovery** — `sniff`, `sysmon`
-- **DNS & identity** — `dnsbl`
+Quick summary of categories with work pending:
+
+- **Discovery** — `sniff` *(planned, low priority — libpcap)*, `sysmon`
+- **DNS & identity** — `dnsbl`, plus a multi-subcommand expansion of `dns`
 - **Identification** — `oui`
 - **Email & certificates** — `subs`
-- **Crypto utilities** — `hash`, `pwned`, `entropy`, `bcrypt`,
-  `argon2`, `crypt`, `jwt`
-- **File & data forensics** — `imgforensic` *(planned)*,
-  `browser` *(planned)*
-- **Filesystem** — `ls`, `stat`, `tree`
-
-The offensive-tooling section lands later — `crack` (multi-mode
-dictionary attack) and `sqli` (SQL injection detection). Those
-entries are longer because the authorized-testing posture matters
-more and the technique behind each is denser.
+- **Web app analysis** — `webrecon` *(planned — consolidates several
+  small inspectors under one verb)*
+- **File & data forensics** — multi-format expansion of `meta`,
+  `imgforensic` *(planned)*, `browser` *(planned)*
+- **Crypto utility belt** *(new category, awaiting entries)* — `hash`,
+  `pwned`, `entropy`, `bcrypt`, `argon2`, `crypt`, `jwt`
+- **Filesystem** *(new category, awaiting entries)* — `ls`, `stat`, `tree`
+- **Offensive tooling** *(new category, planned, lower priority)* —
+  `sqli`, `crack`, `privscan`
+- **Operational behaviors** *(new category — first non-command entries)* —
+  MAC randomization at launch (boot-time hardware-address spoofing, opt-in);
+  Tor + obfs4 daemon with opt-in command routing (anonymity sidecar +
+  `--via-tor` flag, opt-in); Cathedral messaging (peer-to-peer onion-
+  service chat — encrypted 1-to-1 with file transfer, layered on top of
+  the Tor daemon)
 
 ---
 
