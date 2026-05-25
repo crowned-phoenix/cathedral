@@ -1,6 +1,6 @@
 ---
 title: Cookbook roadmap
-last-updated: 2026-05-23
+last-updated: 2026-05-25
 ---
 
 # Cookbook roadmap
@@ -59,25 +59,50 @@ shipped entries cover). Entry will cover both the sidecar's data sources
 and the pattern itself, since the pattern shapes how future live-data
 features get added.
 
-### Crypto utility belt — `hash`, `pwned`, `entropy`, `bcrypt`, `argon2`, `crypt`, `jwt`
-Seven small tools that share the "manipulate or inspect a string of bytes"
-shape:
+### Crypto utility belt — `hash`, `pwned`, `crypt`, `jwt`
+Four small tools that share the "manipulate or inspect a string of
+bytes" shape ([`argon2`](argon2.md), [`bcrypt`](bcrypt.md), and
+[`entropy`](entropy.md) all shipped 2026-05-25 — the password-handling
+triad that covers hashing-for-storage and quick-strength-triage):
 
 - `hash` — file/string digests across MD5/SHA1/SHA2/SHA3 families.
-- `pwned` — Have I Been Pwned lookup via the k-anonymity SHA-1 prefix API.
-- `entropy` — Shannon entropy + byte-distribution analysis (high entropy
-  on file regions = compression, encryption, or padding).
-- `bcrypt` — generate / verify bcrypt password hashes with selectable cost.
-- `argon2` — generate / verify Argon2id hashes with configurable params.
-- `crypt` — classic Unix crypt formats (`$1$`, `$5$`, `$6$`) — generate
-  and identify.
+  Useful both as a primitive and as the pre-hashing partner that
+  bypasses bcrypt's 72-byte input limit. Also relevant: a planned
+  file-mode for entropy-style byte-distribution analysis (high
+  entropy on file regions = compression, encryption, or padding) —
+  that's a separate `--scan` mode candidate rather than its own
+  command, given how thin the surface is.
+- `pwned` — Have I Been Pwned lookup via the k-anonymity SHA-1 prefix
+  API. The definitive breach-list-membership check that complements
+  [`entropy`](entropy.md)'s upper-bound estimate. The shipped
+  `entropy` entry explicitly defers to this as the canonical
+  "is this password in a known breach" answer; landing `pwned` closes
+  the password-strength workflow loop.
+- `crypt` — classic Unix crypt formats (`$1$` md5-crypt, `$5$`
+  sha256-crypt, `$6$` sha512-crypt) — generate and identify
+  `/etc/shadow`-style hashes. The third password-hashing primitive in
+  the category, even older than bcrypt and still found everywhere.
 - `jwt` — decode, verify, and sign JWTs; surface algorithm, claims, and
   the `alg: none` anti-pattern as a finding.
 
-Will land as a single cookbook category section (**Crypto utility belt**)
-when the entries are written together; the tools share enough conceptual
-ground that cross-references between them work better if they ship as a
-batch.
+The shipped [`argon2`](argon2.md), [`bcrypt`](bcrypt.md), and
+[`entropy`](entropy.md) entries establish the cookbook style for this
+category — algorithm history, parameter-tuning guidance, format
+walkthrough, defender vs. legacy-maintenance vs. authorized-testing
+perspectives, constant-time-compare safety notes where relevant.
+`entropy` adds a separate template for *estimator*-style tools (honest
+about being an upper bound, pattern sniffer as the corrective lens).
+Future entries (especially `crypt`) should mirror the hashing-tool
+structure since the underlying primitive shape is similar.
+
+Note on naming: the original `entropy` planned-entry was sketched as
+"Shannon entropy + byte-distribution analysis on file regions." The
+shipped version is a **password-strength estimator** instead — a
+fundamentally different tool that happens to share the name. The
+file-entropy idea remains a future candidate (likely as a `--scan`
+mode on `hash` rather than its own command, since the surface is
+thin and the natural pairing is "compute digest + report
+entropy distribution" on the same file).
 
 ### Filesystem — `ls`, `stat`, `tree`
 Cathedral-styled replacements for the standard utilities, with the
@@ -552,4 +577,4 @@ truth for what's actually been promised at the project level. This
 roadmap is the bridge between them — best-current-understanding of where
 the cookbook is heading.
 
-Last reviewed: 2026-05-23.
+Last reviewed: 2026-05-25.

@@ -42,7 +42,7 @@ implementation.
 
 ## Where to start
 
-Thirty-two entries shipped so far. New readers benefit from this
+Thirty-five entries shipped so far. New readers benefit from this
 path — it builds understanding from local-self outward:
 
 1. [`netinfo`](netinfo.md) — where am I on the network right now
@@ -135,6 +135,14 @@ integrity properties, hidden payloads.
 - [`meta`](meta.md) — document and image metadata extraction
 - [`stego`](stego.md) — LSB steganography for PNG carriers
 
+### Crypto utility belt
+Small, focused tools for hashing, verifying, generating, and decoding
+the byte strings that underpin authentication and integrity.
+
+- [`argon2`](argon2.md) — modern password hashing with Argon2id + PHC verify
+- [`bcrypt`](bcrypt.md) — legacy password hashing with cost-factor verify
+- [`entropy`](entropy.md) — password-strength upper-bound + pattern analysis
+
 ---
 
 ## What's planned
@@ -155,8 +163,8 @@ Quick summary of categories with work pending:
   small inspectors under one verb)*
 - **File & data forensics** — multi-format expansion of `meta`,
   `imgforensic` *(planned)*, `browser` *(planned)*
-- **Crypto utility belt** *(new category, awaiting entries)* — `hash`,
-  `pwned`, `entropy`, `bcrypt`, `argon2`, `crypt`, `jwt`
+- **Crypto utility belt** — `hash`, `pwned`, `crypt`, `jwt`
+  (`argon2`, `bcrypt`, and `entropy` shipped 2026-05-25)
 - **Filesystem** *(new category, awaiting entries)* — `ls`, `stat`, `tree`
 - **Offensive tooling** *(new category, planned, lower priority)* —
   `sqli`, `crack`, `privscan`
