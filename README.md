@@ -42,7 +42,7 @@ implementation.
 
 ## Where to start
 
-Thirty-five entries shipped so far. New readers benefit from this
+Thirty-nine entries shipped so far. New readers benefit from this
 path — it builds understanding from local-self outward:
 
 1. [`netinfo`](netinfo.md) — where am I on the network right now
@@ -125,6 +125,7 @@ mail and HTTPS trust.
 - [`spf`](spf.md) — Sender Policy Framework evaluator with grade A→F
 - [`dmarc`](dmarc.md) — DMARC policy evaluator with grade A→F
 - [`mx-rep`](mx-rep.md) — MX-host reputation across DNS blocklists
+- [`dnsbl`](dnsbl.md) — single-IP reputation across ten DNS blocklists + a whitelist
 - [`ssl`](ssl.md) — TLS handshake and certificate-chain inspection
 - [`crt`](crt.md) — Certificate Transparency log search for subdomain discovery
 
@@ -139,9 +140,12 @@ integrity properties, hidden payloads.
 Small, focused tools for hashing, verifying, generating, and decoding
 the byte strings that underpin authentication and integrity.
 
+- [`hash`](hash.md) — MD5 / SHA-1 / SHA-256 / SHA-512 / CRC32 in one shot
+- [`pwned`](pwned.md) — Have I Been Pwned password lookup via k-anonymity
 - [`argon2`](argon2.md) — modern password hashing with Argon2id + PHC verify
 - [`bcrypt`](bcrypt.md) — legacy password hashing with cost-factor verify
 - [`entropy`](entropy.md) — password-strength upper-bound + pattern analysis
+- [`encrypt` / `decrypt`](encrypt-decrypt.md) — passphrase-based authenticated encryption (AES-GCM / ChaCha20-Poly1305)
 
 ---
 
@@ -156,15 +160,17 @@ offensive tooling) fit — lives in [`roadmap.md`](roadmap.md).
 Quick summary of categories with work pending:
 
 - **Discovery** — `sniff` *(planned, low priority — libpcap)*, `sysmon`
-- **DNS & identity** — `dnsbl`, plus a multi-subcommand expansion of `dns`
+- **DNS & identity** — multi-subcommand expansion of `dns`
+  (`dnsbl` shipped 2026-05-26, under Email & certificates with its sibling `mx-rep`)
 - **Identification** — `oui`
 - **Email & certificates** — `subs`
 - **Web app analysis** — `webrecon` *(planned — consolidates several
   small inspectors under one verb)*
 - **File & data forensics** — multi-format expansion of `meta`,
   `imgforensic` *(planned)*, `browser` *(planned)*
-- **Crypto utility belt** — `hash`, `pwned`, `crypt`, `jwt`
-  (`argon2`, `bcrypt`, and `entropy` shipped 2026-05-25)
+- **Crypto utility belt** — `jwt`
+  (`argon2`, `bcrypt`, `entropy` shipped 2026-05-25;
+  `encrypt`/`decrypt`, `hash`, `pwned` shipped 2026-05-26)
 - **Filesystem** *(new category, awaiting entries)* — `ls`, `stat`, `tree`
 - **Offensive tooling** *(new category, planned, lower priority)* —
   `sqli`, `crack`, `privscan`

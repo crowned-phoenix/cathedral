@@ -1,6 +1,6 @@
 ---
 title: Cookbook roadmap
-last-updated: 2026-05-25
+last-updated: 2026-05-26
 ---
 
 # Cookbook roadmap
@@ -24,14 +24,6 @@ For a *current* index of shipped cookbook entries, see [README.md](README.md).
 
 These tools exist in Cathedral and run today; the cookbook entry just
 hasn't been written yet. Roughly in landing order:
-
-### `dnsbl` — single-IP DNS-blocklist check
-The complementary surface to [`mx-rep`](mx-rep.md): where `mx-rep` resolves
-a domain's MX records and checks each MX host, `dnsbl` takes a bare IP and
-queries the same five blocklists (Spamhaus ZEN, SpamCop, Barracuda, SORBS,
-UCEPROTECT-L1). Cookbook will share most of `mx-rep`'s technique
-content — RBL protocol mechanics, response-code conventions, why these
-five.
 
 ### `oui` — MAC vendor lookup
 Curated ~115-entry table of common consumer / networking / IoT /
@@ -59,29 +51,16 @@ shipped entries cover). Entry will cover both the sidecar's data sources
 and the pattern itself, since the pattern shapes how future live-data
 features get added.
 
-### Crypto utility belt — `hash`, `pwned`, `crypt`, `jwt`
-Four small tools that share the "manipulate or inspect a string of
-bytes" shape ([`argon2`](argon2.md), [`bcrypt`](bcrypt.md), and
+### Crypto utility belt — `jwt`
+One small tool still awaiting its entry
+([`argon2`](argon2.md), [`bcrypt`](bcrypt.md), and
 [`entropy`](entropy.md) all shipped 2026-05-25 — the password-handling
-triad that covers hashing-for-storage and quick-strength-triage):
+triad; [`encrypt` / `decrypt`](encrypt-decrypt.md),
+[`hash`](hash.md), and [`pwned`](pwned.md) shipped 2026-05-26 — the
+authenticated-encryption pair, the multi-algo digest tool, and the
+HIBP k-anonymity lookup that closes the password-strength workflow
+loop alongside `entropy`):
 
-- `hash` — file/string digests across MD5/SHA1/SHA2/SHA3 families.
-  Useful both as a primitive and as the pre-hashing partner that
-  bypasses bcrypt's 72-byte input limit. Also relevant: a planned
-  file-mode for entropy-style byte-distribution analysis (high
-  entropy on file regions = compression, encryption, or padding) —
-  that's a separate `--scan` mode candidate rather than its own
-  command, given how thin the surface is.
-- `pwned` — Have I Been Pwned lookup via the k-anonymity SHA-1 prefix
-  API. The definitive breach-list-membership check that complements
-  [`entropy`](entropy.md)'s upper-bound estimate. The shipped
-  `entropy` entry explicitly defers to this as the canonical
-  "is this password in a known breach" answer; landing `pwned` closes
-  the password-strength workflow loop.
-- `crypt` — classic Unix crypt formats (`$1$` md5-crypt, `$5$`
-  sha256-crypt, `$6$` sha512-crypt) — generate and identify
-  `/etc/shadow`-style hashes. The third password-hashing primitive in
-  the category, even older than bcrypt and still found everywhere.
 - `jwt` — decode, verify, and sign JWTs; surface algorithm, claims, and
   the `alg: none` anti-pattern as a finding.
 
@@ -92,17 +71,35 @@ walkthrough, defender vs. legacy-maintenance vs. authorized-testing
 perspectives, constant-time-compare safety notes where relevant.
 `entropy` adds a separate template for *estimator*-style tools (honest
 about being an upper bound, pattern sniffer as the corrective lens).
-Future entries (especially `crypt`) should mirror the hashing-tool
-structure since the underlying primitive shape is similar.
+The shipped [`encrypt` / `decrypt`](encrypt-decrypt.md) entry adds
+another structural template: a *paired-command* doc covering both
+the producer and the consumer of a shared on-the-wire format
+(`$cthd1$…` envelope). Future paired tools (`jwt sign` / `jwt
+verify`, eventual asymmetric-encryption commands) should mirror this
+shape — single combined entry with the format spec section being the
+backbone.
 
-Note on naming: the original `entropy` planned-entry was sketched as
-"Shannon entropy + byte-distribution analysis on file regions." The
-shipped version is a **password-strength estimator** instead — a
-fundamentally different tool that happens to share the name. The
-file-entropy idea remains a future candidate (likely as a `--scan`
-mode on `hash` rather than its own command, since the surface is
-thin and the natural pairing is "compute digest + report
-entropy distribution" on the same file).
+Note on naming: two cross-currents to be aware of.
+
+1. The original `entropy` planned-entry was sketched as "Shannon
+   entropy + byte-distribution analysis on file regions." The
+   shipped version is a **password-strength estimator** instead — a
+   fundamentally different tool that happens to share the name.
+   The file-entropy idea remains a future candidate, most naturally
+   as a `--scan` mode on the shipped [`hash`](hash.md) since the
+   natural pairing is "compute digest + report entropy distribution"
+   on the same file. Worth doing in `hash` rather than re-using the
+   `entropy` name (the password-strength meaning is now load-bearing).
+
+2. The originally planned `crypt` command (classic Unix crypt
+   formats — `$1$` md5-crypt, `$5$` sha256-crypt, `$6$`
+   sha512-crypt) hasn't shipped. The binary name `crypt` was
+   instead taken by the AEAD implementation that backs
+   [`encrypt` / `decrypt`](encrypt-decrypt.md). If the Unix-crypt
+   tool eventually ships, it will need a different name — most
+   likely `shadowhash` (descriptive of the `/etc/shadow` format
+   it operates on) or absorbed as `hash --shadow-format` now that
+   [`hash`](hash.md) has shipped.
 
 ### Filesystem — `ls`, `stat`, `tree`
 Cathedral-styled replacements for the standard utilities, with the
@@ -257,7 +254,15 @@ only mode), and the pure-Go SQLite choice (`modernc.org/sqlite` over
 ### Email & certificates expansion
 
 (Category is shipped-complete. `spf` / `dmarc` / `mx-rep` / `ssl` / `crt`
-plus the awaited `subs` covers the surface.)
+plus the awaited `subs` covers the surface. [`dnsbl`](dnsbl.md) shipped
+2026-05-26 as the sibling to [`mx-rep`](mx-rep.md): single-IP RBL
+check across ten lists — the five `mx-rep` uses plus UCEPROTECT-L2/L3
+escalation, PSBL, Mailspike Z, and DNSWL as the allowlist anchor.
+Cookbook covers the RFC 5782 reverse-IP mechanism, the 127.0.0.x
+response-code convention, per-list rationale (why these ten,
+including UCEPROTECT-L3's false-positive caveat), and the Spamhaus
+public-resolver poisoning caveat that makes `/etc/resolv.conf`
+choice load-bearing for trustworthy results.)
 
 ### New category — Crypto utility belt
 
@@ -577,4 +582,4 @@ truth for what's actually been promised at the project level. This
 roadmap is the bridge between them — best-current-understanding of where
 the cookbook is heading.
 
-Last reviewed: 2026-05-25.
+Last reviewed: 2026-05-26.
