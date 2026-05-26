@@ -25,14 +25,6 @@ For a *current* index of shipped cookbook entries, see [README.md](README.md).
 These tools exist in Cathedral and run today; the cookbook entry just
 hasn't been written yet. Roughly in landing order:
 
-### `oui` — MAC vendor lookup
-Curated ~115-entry table of common consumer / networking / IoT /
-virtualization OUI prefixes. Also flags multicast and locally-administered
-MACs. Cookbook will cover the OUI registry structure (IEEE-assigned 24-bit
-prefixes, plus 28-bit MA-M and 36-bit MA-S blocks) and why a curated table
-beats a full IEEE OUI database for the analyst use case (small, fast,
-covers the vast majority of MACs you actually see).
-
 ### `subs` — subdomain enumeration via dictionary + DNS-zone walking
 The third complementary surface to [`crt`](crt.md) (CT log search) and
 [`fav`](fav.md) (favicon pivot). Where those two find subdomains via
@@ -187,6 +179,16 @@ likely consolidate, with per-subcommand sections under one entry.
 
 ### Identification expansion
 
+[`oui`](oui.md) shipped 2026-05-26 — MAC vendor lookup against a
+curated 115-entry table covering common consumer / networking /
+IoT / virtualisation OUIs. Cookbook covers the IEEE OUI registry
+structure (24-bit OUI + 28-bit MA-M + 36-bit MA-S block sizes),
+the multicast and locally-administered bit decoding in the first
+MAC byte, and the rationale for a hand-curated table over the
+full ~36k IEEE registry. With `oui` shipped, the **Identification
+category is complete** (whois / asn / geoip / oui / locate all
+have entries).
+
 [`locate`](locate.md) shipped 2026-05-23 — address-to-satellite-view
 geocoder with phosphor map render and auto-centred globe pin. The
 cookbook entry covers the Photon geocoder, the Web Mercator slippy-
@@ -217,6 +219,28 @@ likely graduate together into a renamed *Geographic intelligence*
 subcategory.
 
 ### Web app analysis expansion
+
+[`seo`](seo.md) shipped 2026-05-26 — technical-SEO audit with
+shallow internal crawl + letter grade. Single-URL audit + BFS
+crawl up to 20 pages by default, 16 audit rules covering the
+mechanical regressions that hit a relaunched site (lost titles,
+broken canonicals, missing OG metadata, robots.txt accidentally
+blocking the catalog, sitemap.xml entries returning 4xx/5xx,
+multiple H1s, image alts dropped, etc.). Opt-in `--cwv` flag adds
+Core Web Vitals via Google's free PageSpeed Insights API.
+Cookbook entry covers the 16 rules with severity tiers, the
+politeness model (1 RPS + honest UA + robots.txt enforcement),
+the letter-grade formula (severity-weighted, page-count
+normalised), and the honest framing that this is **technical
+SEO audit, not ranking-cause diagnosis** — backlink / keyword
+data is paid-API territory Cathedral deliberately stays out of.
+
+First Cathedral tool to bring in `golang.org/x/net/html` as a
+dependency. Other Cathedral tools have stuck to stdlib + curated
+regex for HTML, but `seo` needs real tree-walking (heading
+hierarchy, attribute extraction, JSON-LD recursion) where regex
+gets brittle fast. The dep is pure-Go so the static-binary
+property holds.
 
 **`webrecon` — passive web reconnaissance multi-tool.** Single verb
 absorbing what would be separate small tools, sharing an HTTP client,

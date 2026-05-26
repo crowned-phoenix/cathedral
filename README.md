@@ -42,7 +42,7 @@ implementation.
 
 ## Where to start
 
-Forty-one entries shipped so far. New readers benefit from this
+Forty-three entries shipped so far. New readers benefit from this
 path — it builds understanding from local-self outward:
 
 1. [`netinfo`](netinfo.md) — where am I on the network right now
@@ -103,6 +103,7 @@ to. Live registry queries and offline geolocation lookups.
 - [`whois`](whois.md) — registry and ownership lookup for domains and IPs
 - [`asn`](asn.md) — BGP-table attribution for IPs and hostnames
 - [`geoip`](geoip.md) — offline IP geolocation
+- [`oui`](oui.md) — MAC address vendor lookup against a curated table
 - [`locate`](locate.md) — address-to-satellite-view with phosphor map render
 
 ### Web app analysis
@@ -117,6 +118,7 @@ they expose, what their security posture looks like.
 - [`waf`](waf.md) — Web Application Firewall fingerprinting
 - [`fav`](fav.md) — favicon hashing for infrastructure pivot
 - [`tech`](tech.md) — web technology fingerprinter
+- [`seo`](seo.md) — technical-SEO audit with shallow internal crawl + letter grade
 
 ### Email & certificates
 Mail-authentication policy, MX-host reputation, TLS certificate
@@ -164,7 +166,7 @@ Quick summary of categories with work pending:
 - **Discovery** — `sysmon` (`sniff` shipped 2026-05-26 using raw AF_PACKET — no libpcap needed)
 - **DNS & identity** — multi-subcommand expansion of `dns`
   (`dnsbl` shipped 2026-05-26, under Email & certificates with its sibling `mx-rep`)
-- **Identification** — `oui`
+- **Identification** — *(category complete; `oui` shipped 2026-05-26)*
 - **Email & certificates** — `subs`
 - **Web app analysis** — `webrecon` *(planned — consolidates several
   small inspectors under one verb)*
