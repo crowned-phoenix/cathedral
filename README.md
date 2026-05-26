@@ -42,7 +42,7 @@ implementation.
 
 ## Where to start
 
-Thirty-nine entries shipped so far. New readers benefit from this
+Forty-one entries shipped so far. New readers benefit from this
 path — it builds understanding from local-self outward:
 
 1. [`netinfo`](netinfo.md) — where am I on the network right now
@@ -87,6 +87,7 @@ conversations are happening on this machine.
 - [`lan-scan`](lan-scan.md) — local subnet sweep with vendor identification
 - [`discover`](discover.md) — TCP-ping service inventory across a subnet
 - [`wifi`](wifi.md) — wireless network scanner with band, channel, security, vendor
+- [`sniff`](sniff.md) — passive packet capture with proto/host/port filter (Linux, needs CAP_NET_RAW)
 
 ### DNS & identity
 Resolving names to addresses and addresses back to names — the
@@ -146,6 +147,7 @@ the byte strings that underpin authentication and integrity.
 - [`bcrypt`](bcrypt.md) — legacy password hashing with cost-factor verify
 - [`entropy`](entropy.md) — password-strength upper-bound + pattern analysis
 - [`encrypt` / `decrypt`](encrypt-decrypt.md) — passphrase-based authenticated encryption (AES-GCM / ChaCha20-Poly1305)
+- [`jwt`](jwt.md) — decode + verify JSON Web Tokens with alg-safety classification
 
 ---
 
@@ -159,7 +161,7 @@ offensive tooling) fit — lives in [`roadmap.md`](roadmap.md).
 
 Quick summary of categories with work pending:
 
-- **Discovery** — `sniff` *(planned, low priority — libpcap)*, `sysmon`
+- **Discovery** — `sysmon` (`sniff` shipped 2026-05-26 using raw AF_PACKET — no libpcap needed)
 - **DNS & identity** — multi-subcommand expansion of `dns`
   (`dnsbl` shipped 2026-05-26, under Email & certificates with its sibling `mx-rep`)
 - **Identification** — `oui`
@@ -168,9 +170,9 @@ Quick summary of categories with work pending:
   small inspectors under one verb)*
 - **File & data forensics** — multi-format expansion of `meta`,
   `imgforensic` *(planned)*, `browser` *(planned)*
-- **Crypto utility belt** — `jwt`
+- **Crypto utility belt** — *(category complete)*
   (`argon2`, `bcrypt`, `entropy` shipped 2026-05-25;
-  `encrypt`/`decrypt`, `hash`, `pwned` shipped 2026-05-26)
+  `encrypt`/`decrypt`, `hash`, `pwned`, `jwt` shipped 2026-05-26)
 - **Filesystem** *(new category, awaiting entries)* — `ls`, `stat`, `tree`
 - **Offensive tooling** *(new category, planned, lower priority)* —
   `sqli`, `crack`, `privscan`

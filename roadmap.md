@@ -51,18 +51,24 @@ shipped entries cover). Entry will cover both the sidecar's data sources
 and the pattern itself, since the pattern shapes how future live-data
 features get added.
 
-### Crypto utility belt — `jwt`
-One small tool still awaiting its entry
-([`argon2`](argon2.md), [`bcrypt`](bcrypt.md), and
-[`entropy`](entropy.md) all shipped 2026-05-25 — the password-handling
-triad; [`encrypt` / `decrypt`](encrypt-decrypt.md),
-[`hash`](hash.md), and [`pwned`](pwned.md) shipped 2026-05-26 — the
-authenticated-encryption pair, the multi-algo digest tool, and the
-HIBP k-anonymity lookup that closes the password-strength workflow
-loop alongside `entropy`):
+### Crypto utility belt — *(category complete)*
+All seven entries shipped:
+[`argon2`](argon2.md), [`bcrypt`](bcrypt.md), and
+[`entropy`](entropy.md) on 2026-05-25 — the password-handling triad;
+[`encrypt` / `decrypt`](encrypt-decrypt.md), [`hash`](hash.md),
+[`pwned`](pwned.md), and [`jwt`](jwt.md) on 2026-05-26 — the
+authenticated-encryption pair, the multi-algo digest tool, the
+HIBP k-anonymity lookup (closes the password-strength workflow
+alongside `entropy`), and the JWT inspector / verifier.
 
-- `jwt` — decode, verify, and sign JWTs; surface algorithm, claims, and
-  the `alg: none` anti-pattern as a finding.
+Note on `jwt`: the original planned scope included signing
+("decode, verify, and sign"). The shipped tool covers decode +
+verify only — signing is a producer-side concern best handled
+inside the application that needs to produce tokens, where the
+key-management context lives. If a `jwt sign` subcommand ever
+ships, it'll inherit the same five-algorithm-family dispatch
+(HMAC / RSA-PKCS1v15 / RSA-PSS / ECDSA-r∥s / EdDSA) from the
+verify path.
 
 The shipped [`argon2`](argon2.md), [`bcrypt`](bcrypt.md), and
 [`entropy`](entropy.md) entries establish the cookbook style for this
@@ -135,13 +141,29 @@ the edge (recon note, not a vuln). When this lands, the existing
 `discover.md` entry gets a *significant* update rather than splitting into
 three entries.
 
-**`sniff` — passive packet capture / findings extractor (low priority).**
-DHCP-request device inventory, ARP-spoof anomaly detection, DNS-query
-introspection, TLS-SNI extraction (no decryption), plaintext-cred
-extraction in HTTP/FTP/Telnet/SMTP/IMAP, mDNS/SSDP service discovery,
-port-scan detection (defensive mirror). Low priority because libpcap
-imposes a CGO tax (the rest of Cathedral is pure-Go static-binary) and
-`tshark` / `bettercap` cover the ground.
+**`sniff` v1** [shipped 2026-05-26, see [`sniff`](sniff.md)] —
+basic passive packet capture: Ethernet → IPv4 / IPv6 / ARP → TCP /
+UDP / ICMP / ICMPv6, with Cathedral's `proto=` / `host=` / `port=`
+filter syntax. The libpcap concern in earlier roadmap drafts turned
+out to be unnecessary — raw `AF_PACKET` sockets are reachable from
+pure Go via `syscall.Socket` directly, so the static-binary property
+holds. Trade-off: Linux-only (the syscall doesn't exist on macOS /
+Windows). Cookbook entry covers the AF_PACKET shortcut, the
+CAP_NET_RAW capability model, the Ethernet-to-layer-4 parser, and
+TCP-flag decoding.
+
+**`sniff` v2 — findings extractor (lower priority).** The richer
+behaviour the original roadmap envisioned: DHCP-request device
+inventory, ARP-spoof anomaly detection, DNS-query introspection,
+TLS-SNI extraction (no decryption), plaintext-cred extraction in
+HTTP/FTP/Telnet/SMTP/IMAP, mDNS/SSDP service discovery, port-scan
+detection (defensive mirror). All deferred: the v1 shipped surface
+covers the "show me packets matching a filter" use case, and the
+richer extractors compete with `tshark` / `bettercap` on their
+home turf without a clear Cathedral-specific win yet. Likely shape
+when revisited: subcommands (`sniff dhcp`, `sniff arp`, `sniff
+plaintext`) sharing v1's socket+parser pipeline, each emitting
+its own finding-event type rather than packet-events.
 
 ### DNS & identity expansion
 
