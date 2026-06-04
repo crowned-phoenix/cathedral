@@ -1,6 +1,6 @@
 ---
 title: Cookbook roadmap
-last-updated: 2026-05-26
+last-updated: 2026-06-04
 ---
 
 # Cookbook roadmap
@@ -157,6 +157,33 @@ when revisited: subcommands (`sniff dhcp`, `sniff arp`, `sniff
 plaintext`) sharing v1's socket+parser pipeline, each emitting
 its own finding-event type rather than packet-events.
 
+**`rf-recon` — passive RF situational awareness (monitor-mode).** The
+monitor-mode tier neither [`wifi`](wifi.md) (managed-mode beacon scan)
+nor [`sniff`](sniff.md) (managed-mode IP-frame capture) covers. Seeded
+by evaluating [ruvnet/ruview](https://github.com/ruvnet/ruview), a
+WiFi-CSI sensing platform — its headline through-wall vitals/pose
+capabilities are CSI-gated and need ESP32 hardware, so they don't
+translate to a laptop tool, but its reframe (*the ambient RF
+environment carries presence/motion information a passive listener can
+read*) does. Two subcommands: `rf-recon map` (passive 802.11
+neighbourhood — APs, **stations**, probe-request PNL harvesting,
+per-MAC presence/RSSI-trend) and `rf-recon motion` (RSSI-variance
+motion radar, the one RuView sensing capability that survives without
+CSI hardware — coarse but on *real measured radio*). Cookbook entry,
+when it lands, will cover: the pure-Go monitor-mode capture path
+(radiotap + 802.11 parsing over `AF_PACKET`, no libpcap — same
+static-binary trick `sniff` established), the `cathedral-rfmon`
+setcap'd helper privilege split (`CAP_NET_ADMIN` for mode-switch +
+channel hop, `CAP_NET_RAW` for capture), RSSI-variance motion
+detection with its honest accuracy ceiling (motion presence, **never**
+vitals/pose — the entry's job is to *not* inherit RuView's
+overclaiming), the MAC-randomization caveat on device tracking, and an
+*Authorized use* section closer to `sniff`'s wiretap framing than
+`wifi`'s "names on doors." The CSI-over-serial/UDP ESP32 bridge stays
+an **investigation field** in `ROADMAP.md`, not committed scope — if it
+graduates it becomes Cathedral's first optional-external-hardware
+feature. Full scope in `ROADMAP.md` at the repo root.
+
 ### DNS & identity expansion
 
 **`dns` — multi-subcommand verb.** The current `dns` is a single-domain
@@ -241,6 +268,57 @@ regex for HTML, but `seo` needs real tree-walking (heading
 hierarchy, attribute extraction, JSON-LD recursion) where regex
 gets brittle fast. The dep is pure-Go so the static-binary
 property holds.
+
+Expanded 2026-06-02 to close common-SEO-mistake gaps the original
+ruleset missed: **sitemap discovery** now tries the `robots.txt`
+`Sitemap:` directives before `/sitemap.xml` and flags
+`sitemap-missing` (medium) when neither yields URLs; **broken
+internal links** are HEAD-probed across the long tail of internal
+targets the crawl budget doesn't fetch as pages, reported as
+`internal-link-broken` (medium) *attributed to the source page*;
+**structured-data detection** broadened from JSON-LD-only to also
+recognise microdata (`itemscope`) and RDFa (`typeof` / `vocab`),
+killing the false-positive on sites that use those (rule renamed
+`json-ld-missing` → `structured-data-missing`); and a new
+`h1-empty` rule catches an `<h1>` that exists but carries no text
+(a broken heading `h1-missing` never saw). HTML-validity checking
+(unclosed tags etc.) was deliberately *not* added — `x/net/html`
+normalises malformed markup away and HTML validity isn't a Google
+ranking signal, so it's low-ROI.
+
+Expanded again 2026-06-04 after testing against an intentionally-
+broken reference site (`testingrepo-steel.vercel.app`) exposed two
+real gaps. (1) **Off-site canonical** — the worst canonical mistake
+isn't a missing tag but a present one pointing at a domain you
+don't own (`<link rel=canonical href=https://example.com/…>`, a
+template left-over that de-indexes the page). `checkCanonical` now
+compares the canonical's registrable domain (eTLD+1 via
+`x/net/publicsuffix`, so legit www/subdomain canonicals don't
+false-positive) against the page host and emits `canonical-offsite`
+(critical), with a sharper detail string for placeholder hosts.
+(2) **Grade calibration** — per-page severity averaging normalised
+systemic rot away (the reference site graded B despite two-thirds
+of its pages being non-indexable). `computeGrade` gained an
+**indexability floor**: it counts distinct pages carrying a
+"page-killer" finding (`robots-noindex` / `canonical-offsite` /
+`http-error` / `fetch-failed` / `robots-blocked`) and floors the
+letter by that fraction (≥50% → F, ≥30% → D, ≥15% → C), only ever
+making the grade worse. The reference site moved B → F; a healthy
+control (MDN) stayed put with zero false positives. Also added
+`heading-duplicate` (repeated heading text on one page) and
+site-level `duplicate-title` / `duplicate-description` (same
+title/description across crawled pages).
+
+Open future candidates for this entry, all confirmed missing
+against the reference site but deferred as higher-effort / noisier:
+**keyword-stuffing** (density heuristic), **duplicate body-content**
+(shingling/fingerprint, not just meta matching), **mobile-usability**
+beyond the viewport tag (needs rendering), **external** broken-link
+probing (only internal links are HEAD-checked today), and
+`hreflang`-graph validation. A known latent fix worth folding in:
+`robots-blocked` is emitted for display but isn't appended to the
+findings slice `computeGrade` sees, so it doesn't yet count toward
+the indexability floor.
 
 **`webrecon` — passive web reconnaissance multi-tool.** Single verb
 absorbing what would be separate small tools, sharing an HTTP client,
@@ -628,4 +706,4 @@ truth for what's actually been promised at the project level. This
 roadmap is the bridge between them — best-current-understanding of where
 the cookbook is heading.
 
-Last reviewed: 2026-05-26.
+Last reviewed: 2026-06-04.
