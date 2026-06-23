@@ -5,8 +5,8 @@ category: discovery
 status: shipped
 version-introduced: 1.0
 authorized-use: low
-last-updated: 2026-05-15
-related: [netinfo, lan-scan, oui]
+last-updated: 2026-06-23
+related: [netinfo, lan-scan, oui, doctor, rf-recon]
 ---
 
 # `wifi` — wireless network scanner with band, channel, security, vendor
@@ -267,6 +267,55 @@ Things this snapshot teaches:
 The signal bars (full / partial / dim) double as a coarse
 quality reading: full bars = strong association possible; one
 bar = visible but unreliable.
+
+## The radar scope (HUD)
+
+The console table above stays canonical — it is what you script
+and pipe against. But the same `ap` events also drive a live
+**radar scope** in Cathedral's visual panel, built entirely from
+the JSONL stream this command already emits. Nothing about the
+scan changes; the radar is purely a second way to *read* it.
+
+Each access point is plotted in polar coordinates:
+
+- **Radius is signal strength.** The strongest networks sit on the
+  inner rings; weak ones drift toward the edge. Whichever scale the
+  backend reported — dBm or percentage — the rings label themselves
+  honestly (`has_dbm` decides).
+- **Angle is channel.** 2.4 GHz fans across the upper hemisphere,
+  5/6 GHz across the lower, so the spectrum has a fixed, readable
+  geography. Access points sharing a channel — the 1 / 6 / 11
+  pile-ups every real scan produces — fan out into a small cluster
+  instead of stacking into one unreadable dot.
+- **Colour is security posture.** Open networks glow warn-amber;
+  WPA2 sits in standard phosphor; WPA3 stands apart in bright
+  cyan-green. The same `security` label the table renders, read as
+  a colour.
+- **Hidden networks render as ghost rings** — located by BSSID,
+  channel and signal, but drawn without a fill, since the name is
+  all that's missing.
+
+Because raw radio jitters by several dBm between readings, each
+network's plotted position is smoothed (an exponential moving
+average per BSSID) so the scope reads as alive rather than
+twitchy. A phosphor beam sweeps the display, and a newly-heard AP
+announces itself with a brief expanding pulse.
+
+Two interactions make the dense centre legible:
+
+- **Maximize** (the panel's ⤢ button, or `Ctrl+Shift+M`) lifts the
+  scope to the centre of the screen at full size — useful when a
+  busy site shows a dozen-plus networks. It is a generic Cathedral
+  surface, so the same gesture enlarges any visual panel.
+- **Hover** over any point and a card shows the network's SSID,
+  **BSSID**, vendor, band, channel and signal — so the unlabelled
+  dots at the edge are inspectable without re-reading the table.
+
+The radar adds no new data and sends nothing new onto the air; it
+is a rendering of the passive scan described above. See also the
+[`rf-recon`](rf-recon.md) roadmap entry, whose monitor-mode map is
+designed to plot onto this same scope, adding client stations and
+association lines that managed-mode `wifi` cannot see.
 
 ## Output protocol
 

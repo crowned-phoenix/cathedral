@@ -80,6 +80,7 @@ Local-network and host-level enumeration — what's online, what
 services are running, what addresses have hostnames, what
 conversations are happening on this machine.
 
+- [`doctor`](doctor.md) — preflight: capabilities, scan backends, uplink — with the exact fix for any gap
 - [`netinfo`](netinfo.md) — local network introspection with live sparklines
 - [`ports`](ports.md) — local listening sockets and the processes that own them
 - [`conns`](conns.md) — active TCP connections with owning process
@@ -88,6 +89,7 @@ conversations are happening on this machine.
 - [`discover`](discover.md) — TCP-ping service inventory across a subnet
 - [`wifi`](wifi.md) — wireless network scanner with band, channel, security, vendor
 - [`sniff`](sniff.md) — passive packet capture with proto/host/port filter (Linux, needs CAP_NET_RAW)
+- [`rf-recon`](rf-recon.md) — passive monitor-mode 802.11 map: APs, clients, probe-request leaks, presence (draft, Linux, needs monitor-mode adapter)
 
 ### DNS & identity
 Resolving names to addresses and addresses back to names — the
@@ -95,6 +97,7 @@ forward and reverse halves of the public DNS view of a target.
 
 - [`dns`](dns.md) — forward DNS lookups for A/AAAA/MX/NS/TXT/CNAME
 - [`reverse-dns`](reverse-dns.md) — PTR record sweep across a subnet
+- [`subs`](subs.md) — live subdomain enumeration from CT logs + wordlist brute
 
 ### Identification
 Who owns this name or address, where is it, what AS does it belong
@@ -105,6 +108,7 @@ to. Live registry queries and offline geolocation lookups.
 - [`geoip`](geoip.md) — offline IP geolocation
 - [`oui`](oui.md) — MAC address vendor lookup against a curated table
 - [`locate`](locate.md) — address-to-satellite-view with phosphor map render
+- [`identify`](identify.md) — identifier→public-footprint OSINT across free, keyless sources (authorized use)
 
 ### Web app analysis
 Inspecting websites from the outside — what's running them, what

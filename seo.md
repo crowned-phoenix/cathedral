@@ -827,9 +827,9 @@ Line-oriented JSON. Event types:
 | `robots`       | `url`, `found`, `rules` (summary)                                   |
 | `sitemap`      | `found`, `url`, `urls_found`, `declared_in_robots` (`found:false` when none) |
 | `crawl_start`  | `max`, `depth`                                                      |
-| `crawl_fetch`  | `url`, `depth`                                                      |
+| `crawl_fetch`  | `url`, `depth`, `parent` (page it was discovered from; "" for entry) |
 | `crawl_done`   | `pages`, `queued`                                                   |
-| `page`         | `url`, `status`, `depth`, `audit` (finding count), `redirects`       |
+| `page`         | `url`, `status`, `depth`, `parent`, `audit` (finding count), `redirects` |
 | `linkcheck_start`| `targets`, `cap` — distinct uncrawled internal targets to probe   |
 | `linkcheck_done` | `probed`, `broken`                                                |
 | `finding`      | `page`, `severity`, `code`, `title`, `detail`                       |
