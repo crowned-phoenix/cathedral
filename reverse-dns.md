@@ -199,7 +199,7 @@ $ reverse-dns
   192.168.1.1     OpenWrt.lan
   192.168.1.2     TeliaLXC.lan
   192.168.1.103   Galaxy-S22.lan
-  192.168.1.170   guido.lan
+  192.168.1.170   macbook.lan
   192.168.1.176   crowned-phoenix.lan
   192.168.1.214   JC.lan
   192.168.1.231   iPhone.lan

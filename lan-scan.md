@@ -179,7 +179,7 @@ Captured on a real residential network:
   · 80%  (203/254 probed, 6 responding)
   [ALIVE] 192.168.1.1     d4:35:1d:d1:31:0b   1.01 ms  OpenWrt.lan
   [ALIVE] 192.168.1.2     d6:35:1d:d1:31:0c  10.70 ms  TeliaLXC.lan
-  [ALIVE] 192.168.1.170   f0:18:98:1b:7e:24  99.70 ms  guido.lan  (Apple)
+  [ALIVE] 192.168.1.170   f0:18:98:1b:7e:24  99.70 ms  macbook.lan  (Apple)
   [ALIVE] 192.168.1.176                       0.13 ms  workstation.lan
   [ALIVE] 192.168.1.184   bc:5b:d5:a6:91:91   3.05 ms
   [ALIVE] 192.168.1.231   52:b3:47:be:9e:e1  41.20 ms  iPhone.lan
@@ -197,7 +197,7 @@ Six hosts, five real teaching moments:
   (`d4:35:1d` vs `d6:35:1d` differ only in one bit), nearly
   sequential serials. This is the ISP-managed device that ships
   paired with the router from the same manufacturer batch.
-- **`guido.lan` at .170 with `f0:18:98:...`** — the `f0:18:98` OUI
+- **`macbook.lan` at .170 with `f0:18:98:...`** — the `f0:18:98` OUI
   resolves to Apple in the curated table. RTT of 99.7 ms on a LAN
   is the giveaway for a device in low-power mode (iPad on standby,
   MacBook lid closed). Healthy LAN RTT is under 5 ms.

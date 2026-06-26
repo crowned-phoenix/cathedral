@@ -25,11 +25,11 @@ powerful and easy to misuse; the **[Authorized use](#authorized-use)**
 section is not boilerplate here — read it.
 
 ```
-identify guido@example.com
+identify jane@example.com
 identify torvalds
-identify "Guido Gröön"
+identify "Jane Doe"
 identify "Crowned Phoenix OÜ"
-identify +3725036523
+identify +15551234567
 identify "Jane Doe @ example.com"      # name + domain pivot
 ```
 
@@ -162,6 +162,18 @@ runs:
 - **med** — OpenGraph images scraped from confirmed profile pages.
 - **low** — heuristic image-search matches.
 
+A portrait is trusted by **the page it was found on, not the image's
+domain**. An image-search face is displayed only when its source
+page is a reliable result, and withheld when that page is a weak /
+different-identity / geography-only match — so a photo on a strong
+press release (even one served from a CDN like `cision.com`) is
+shown, while a high-domain photo (say a LinkedIn image) of a
+*different* same-named person is dropped because its page didn't
+match the target. Directly-resolved avatars (Gravatar/GitHub/
+Wikipedia) are always shown. If every candidate's source page is
+weak, the panel shows no portrait rather than a misleading one. The
+confidence tier above is then used only to order the carousel.
+
 ### Region bias
 
 `--region=EE` (or `et_EE`, or inferred from `LANG`/`LC_ALL`) biases
@@ -183,9 +195,56 @@ rendered once on completion as three blocks:
   ordinary people with no knowledge-base entry, this block is
   skipped entirely.
 - **`[ RESULTS ]`** — a search-engine-style list of every URL
-  found, deduplicated across sources: title, URL, snippet.
+  found, deduplicated across sources: title, URL, snippet. The
+  clustering pass sorts them into three confidence tiers by weighing
+  *positive* evidence, not just keyword overlap:
+  - **strong** — the full name tied to the target's corroborated
+    companies, or a page that explicitly states their role
+    ("owner is …"; such a page also *promotes* its company to an
+    anchor, so other pages naming it resolve too).
+  - **uncertain — verify** — either an incomplete name match (only
+    the surname) or a *different* company but the **same geography**
+    as the target. The target's geography is derived from the
+    countries its addresses geocode to (so it's grounded in real
+    resolved locations, not a keyword list) — and an address only
+    counts as the target's when it's corroborated across pages or
+    appears in an address context (an "Aadress:" label, beside the
+    target's name, or led by one of the target's companies in the
+    "Company, address" registered-office pattern), so a stray
+    address-shaped string in a footer is ignored rather than
+    plotted. Geography is matched across
+    languages — a target in Estonia still matches a page that only
+    says "Eesti". Shared geography is treated as corroboration, so a
+    same-country page lands here, never in "different".
+  - **different identity** — a confident name collision: its own
+    unrelated company *and* a different geography (likely another
+    person who happens to share the name).
 - **`[ SUMMARY ]`** — hit / portrait / source counts, plus the
   per-source contribution roll-up so you can see provenance.
+
+### The dossier graph
+
+The side panel shows the candidate portrait; **maximize it** (the
+panel's expand control, or the maximize modal) to open the full
+dossier — the **portrait beside the *entity-graph map***, like an
+ID card: the photo (the "who") on the left, the linked-entity map
+(the "what") on the right. The portrait stays steppable (the `‹`/`›`
+chevrons and the modal's arrow keys still cycle candidates). The map
+is a radial graph of everything the harvest resolved around the
+target. The target is the hub; companies, linked people, emails,
+phones, addresses, and enriched domains radiate out as colour-coded
+spokes. A node's **distance from the centre** encodes corroboration
+(better-corroborated facts are pulled inward) and its **size** grows
+with the number of distinct pages that mention it. Faint chords
+between two entities mean they co-occurred on the same source page —
+the same page-level corroboration the clustering pass uses, made
+visible. Hover any node for its full value and page count. The map
+plots only entities corroborated by a reliable page — anything whose
+every source was a weak / different-identity / geography-only result
+is left off, so the dossier reflects the target, not a wrong-person
+page that happened to share the name. (With no portrait found, the
+map takes the whole modal; the compact side panel always keeps the
+picture.)
 
 ### The authorized-use gate
 
@@ -249,9 +308,9 @@ addresses, phone numbers, usernames, person names (First Last), or
 company names …
 
   examples:
-    identify guido@example.com           (email)
-    identify +3725036523                 (phone)
-    identify "Guido Gröön"               (person name)
+    identify jane@example.com            (email)
+    identify +15551234567                (phone)
+    identify "Jane Doe"                  (person name)
     identify "Crowned Phoenix OÜ"        (company)
     identify torvalds                    (username)
 ```
