@@ -535,83 +535,30 @@ are launch-time behaviors of the Cathedral app itself rather
 than user-typed commands; the `--via-tor` flag is a routing
 modifier, not a standalone command in its own right.
 
-**`Cathedral messaging` — peer-to-peer onion-service chat.**
-Encrypted 1-to-1 messaging between Cathedral users. Each
-instance exposes its own Tor v3 onion service; contacts add
-each other by sharing 56-character .onion addresses; messages
-travel between two onion services with neither party knowing
-the other's IP. Built on top of the bundled Tor daemon from
-the previous feature — same `tor` binary, same `bine` wrapper.
-Settled v1 design: online-only (both parties online to
-deliver), 1-to-1 only (no group chat), TOFU identity model
-(first-seen .onion is the canonical key), file transfer
-included (chunked + resumable + sha256-verified).
+**`Cathedral messaging` — shipped 2026-11-16 as [`msg`](msg.md).**
+Peer-to-peer onion-service chat, now documented in its own entry under
+*Privacy & communications*, alongside the encrypted [`vault`](vault.md)
+whose at-rest crypto it reuses. The shipped design differs from the
+plan that used to sit here in a few deliberate ways:
 
-The cookbook entry will be the longest in the cookbook by a
-wide margin — anonymity messaging tools are held to Signal /
-Cwtch / Briar standards, and the documentation burden tracks
-that bar. Coverage:
+- It needs only a **minimal bundled `tor`** hosting one onion service —
+  not the full `--via-tor` routing feature above, which remains
+  planned.
+- **History at rest uses the vault's primitives** (Argon2id-wrapped
+  master key, XChaCha20-Poly1305 with purpose-bound AD) rather than
+  SQLite + AES-GCM.
+- **No TOFU step.** The Noise static key is derived from the onion
+  key, so the address you dial *is* the key you authenticate; the
+  residual risk moves to the out-of-band address exchange, which the
+  entry covers.
+- **Session-level forward secrecy** (fresh Noise ephemerals per
+  session), not a per-message ratchet.
+- File transfer: 32 KiB records, receiver-pulled and resumable, 2 GiB
+  cap, always asks before downloading.
 
-- **The two-layer encryption model.** Tor v3 onion service
-  provides client-↔-service transport encryption; Noise IK on
-  top adds application-layer end-to-end encryption with
-  forward-secrecy ratcheting and identity binding to the
-  Ed25519 onion key. Why both layers — a bug in either is
-  mitigated by the other.
-- **Identity = Ed25519 onion-service key.** The .onion address
-  derives from the key; the address is the canonical user ID.
-  Friendly handles (`crowned-phoenix.cthd`) are display aids.
-  Critical UX: the backup-and-restore flow, because losing
-  the key = losing the identity and all message history.
-- **The TOFU model and its limits.** First-seen .onion address
-  pinned as the canonical key; subsequent connections verify
-  the same key; mismatch raises a loud warning. The known
-  limitation that v1 cannot detect: first-contact key
-  substitution by a network adversary positioned at both
-  endpoints' initial handshake. Out-of-band verification is
-  the only mitigation; the UI nudges toward it but doesn't
-  enforce.
-- **The file transfer protocol.** Sender announces (filename
-  / size / sha256 / mime); receiver accepts or declines;
-  sender streams 64 KB chunks with chunk-index for resume
-  after circuit drop; receiver verifies sha256 on completion.
-  Default cap 1 GB. Filenames hashed on disk to avoid metadata
-  leakage via directory listings.
-- **Master-passphrase storage encryption.** Argon2id (interactive
-  params) → 32-byte key → AES-256-GCM on the SQLite database
-  and each file blob. Cathedral starts locked; messaging panel
-  shows *locked* and refuses incoming connections until
-  unlock. The threat model this protects against (compromised
-  disk image without passphrase) versus what it doesn't (live
-  RAM dump, keylogged passphrase).
-- **The anti-abuse layer.** Contact requests queue for approval
-  rather than auto-accepting; block list drops at the protocol
-  layer (initiator can't tell if you're online); per-contact
-  rate limiting; no global broadcast or contact-discovery
-  directory (out-of-band introductions only).
-- **Misuse note — the longest section of any cookbook entry.**
-  Stakes shift: a bug in `--via-tor` leaks metadata about a
-  recon session; a bug here deanonymises real users with real
-  privacy needs. Tor's threat-model limits inherited verbatim:
-  no defence against country-level adversaries who can
-  correlate flows at both ends. Online-only ⇒ presence
-  reveals *that* you're using Cathedral even if not *what*.
-  v1 has no deniability primitive — conversations are
-  cryptographically attributable to the sender. Forward
-  secrecy applies to the wire, not the disk.
-- **What Cathedral is now.** This feature crosses the line
-  from "recon toolkit with aesthetic" to "recon toolkit plus
-  anonymity messaging app". Documentation will be explicit
-  about that — the two product categories share a binary but
-  serve different use cases, and users should understand
-  which they're picking up.
-
-Sits next to MAC randomization and the Tor daemon in this
-category because all three are launch-time behaviors of the
-Cathedral app itself. Cathedral messaging is also the entry
-that most justifies the existence of the Operational
-behaviors category — it isn't a command, but it earns its
-own deep technique reference.
+Next: wormhole-style **pairing codes** (short one-time code + PAKE) so
+two people can exchange addresses without copy-pasting 56 characters
+through a channel that might alter them.
 
 ### New category — Offensive tooling (lower priority)
 

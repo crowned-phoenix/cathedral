@@ -42,7 +42,7 @@ implementation.
 
 ## Where to start
 
-Forty-three entries shipped so far. New readers benefit from this
+Forty-nine entries shipped so far. New readers benefit from this
 path — it builds understanding from local-self outward:
 
 1. [`netinfo`](netinfo.md) — where am I on the network right now
@@ -83,7 +83,7 @@ conversations are happening on this machine.
 - [`doctor`](doctor.md) — preflight: capabilities, scan backends, uplink — with the exact fix for any gap
 - [`netinfo`](netinfo.md) — local network introspection with live sparklines
 - [`ports`](ports.md) — local listening sockets and the processes that own them
-- [`conns`](conns.md) — active TCP connections with owning process
+- [`conns`](conns.md) — active TCP connections with owning process, plus live connection arcs on the globe
 - [`scan`](scan.md) — TCP port scanner with banner grab
 - [`lan-scan`](lan-scan.md) — local subnet sweep with vendor identification
 - [`discover`](discover.md) — TCP-ping service inventory across a subnet
@@ -155,6 +155,13 @@ the byte strings that underpin authentication and integrity.
 - [`encrypt` / `decrypt`](encrypt-decrypt.md) — passphrase-based authenticated encryption (AES-GCM / ChaCha20-Poly1305)
 - [`jwt`](jwt.md) — decode + verify JSON Web Tokens with alg-safety classification
 
+### Privacy & communications
+Keeping your own data and conversations private — files no other
+program can read, and messaging with no server in the middle.
+
+- [`vault`](vault.md) — encrypted file vault that only Cathedral can open (Argon2id + chunked XChaCha20-Poly1305)
+- [`msg`](msg.md) — peer-to-peer encrypted messaging over Tor onion services, with file transfer
+
 ---
 
 ## What's planned
@@ -185,9 +192,9 @@ Quick summary of categories with work pending:
 - **Operational behaviors** *(new category — first non-command entries)* —
   MAC randomization at launch (boot-time hardware-address spoofing, opt-in);
   Tor + obfs4 daemon with opt-in command routing (anonymity sidecar +
-  `--via-tor` flag, opt-in); Cathedral messaging (peer-to-peer onion-
-  service chat — encrypted 1-to-1 with file transfer, layered on top of
-  the Tor daemon)
+  `--via-tor` flag, opt-in)
+- **Privacy & communications** — `msg` and `vault` shipped 2026-11-16;
+  next: wormhole-style pairing codes for exchanging `msg` addresses
 
 ---
 
