@@ -1,6 +1,6 @@
 ---
 title: Cookbook roadmap
-last-updated: 2026-06-04
+last-updated: 2026-11-23
 ---
 
 # Cookbook roadmap
@@ -559,6 +559,25 @@ plan that used to sit here in a few deliberate ways:
 Next: wormhole-style **pairing codes** (short one-time code + PAKE) so
 two people can exchange addresses without copy-pasting 56 characters
 through a channel that might alter them.
+
+### New category — Assistant
+
+**`ai` — shipped 2026-11-22 as [`ai`](ai.md).** A local language model
+(bundled llama.cpp `llama-server`, GGUF models, CPU-only) that takes
+context from pipes, the previous command, the side panel, terminal
+sessions and the editor, and turns its suggestions into command cards
+that run only after approval. Chats are kept in memory or sealed into
+the [`vault`](vault.md), never written in the clear.
+
+Next:
+- **Reopen a vault-saved chat** to continue it.
+- **Auto-unload** the model after N idle minutes to give the RAM back.
+- **`doctor` line** for the AI: llama-server present, models installed,
+  RAM headroom.
+- **Card follow-ups:** cancel a running card; pin a card's output to
+  the side panel.
+- **Visual context:** feed `identify`, `locate`, `trace`, `seo` and
+  `wifi` results (not just their text) to the model.
 
 ### New category — Offensive tooling (lower priority)
 

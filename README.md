@@ -42,7 +42,7 @@ implementation.
 
 ## Where to start
 
-Forty-nine entries shipped so far. New readers benefit from this
+Fifty entries shipped so far. New readers benefit from this
 path — it builds understanding from local-self outward:
 
 1. [`netinfo`](netinfo.md) — where am I on the network right now
@@ -162,6 +162,12 @@ program can read, and messaging with no server in the middle.
 - [`vault`](vault.md) — encrypted file vault that only Cathedral can open (Argon2id + chunked XChaCha20-Poly1305)
 - [`msg`](msg.md) — peer-to-peer encrypted messaging over Tor onion services, with file transfer
 
+### Assistant
+A language model that runs on this machine, reads what the other
+tools print, and suggests the next command — which you approve.
+
+- [`ai`](ai.md) — local LLM chat (llama.cpp, CPU, offline) with tool-output context and approve-to-run command cards
+
 ---
 
 ## What's planned
@@ -195,6 +201,8 @@ Quick summary of categories with work pending:
   `--via-tor` flag, opt-in)
 - **Privacy & communications** — `msg` and `vault` shipped 2026-11-16;
   next: wormhole-style pairing codes for exchanging `msg` addresses
+- **Assistant** — `ai` shipped 2026-11-22; next: reopen vault-saved
+  chats, auto-unload an idle model, a `doctor` line for the AI stack
 
 ---
 
