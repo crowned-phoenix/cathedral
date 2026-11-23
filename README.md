@@ -42,7 +42,7 @@ implementation.
 
 ## Where to start
 
-Fifty entries shipped so far. New readers benefit from this
+Fifty-two entries shipped so far. New readers benefit from this
 path — it builds understanding from local-self outward:
 
 1. [`netinfo`](netinfo.md) — where am I on the network right now
@@ -168,6 +168,17 @@ tools print, and suggests the next command — which you approve.
 
 - [`ai`](ai.md) — local LLM chat (llama.cpp, CPU, offline) with tool-output context and approve-to-run command cards
 
+### Browsing
+Reading the web from inside the terminal — as text, without
+JavaScript, optionally over Tor.
+
+- [`web`](web.md) — lynx-style text browser: forms, downloads, Tor + `.onion`, reader mode, tables, dithered image previews
+
+### Workspace
+Working on files without leaving Cathedral.
+
+- [`edit`](edit.md) — tabbed editor with a git-aware project tree and incremental syntax highlighting
+
 ---
 
 ## What's planned
@@ -203,6 +214,10 @@ Quick summary of categories with work pending:
   next: wormhole-style pairing codes for exchanging `msg` addresses
 - **Assistant** — `ai` shipped 2026-11-22; next: reopen vault-saved
   chats, auto-unload an idle model, a `doctor` line for the AI stack
+- **Browsing** *(new category)* — `web` shipped 2026-11-23; next: recon
+  over Tor, a new-identity key, file uploads in forms
+- **Workspace** *(new category)* — `edit` documented 2026-11-23; next:
+  fuzzy go-to-file, drag-and-drop moves, per-project run configs
 
 ---
 

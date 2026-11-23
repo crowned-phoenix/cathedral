@@ -579,6 +579,43 @@ Next:
 - **Visual context:** feed `identify`, `locate`, `trace`, `seo` and
   `wifi` results (not just their text) to the model.
 
+### New category — Browsing
+
+**`web` — shipped 2026-11-23 as [`web`](web.md).** A lynx-style text
+browser in the main pane: numbered links and form fields, working
+forms (GET/POST, logins with session cookies), downloads, bookmarks,
+Tor mode with its own bundled tor (`.onion` switches it on), view
+source in the editor, page → `ai`, one-key recon handoff, data tables
+laid out as grids, reader mode, collapsible `<details>`, and image
+previews dithered into phosphor green. No JavaScript, by design.
+
+Next:
+- **Recon over Tor** instead of refusing it in Tor mode.
+- **"New identity"** (fresh Tor circuit) key, per-site circuit isolation.
+- **Forms:** file uploads, `<select multiple>`, multi-line textareas
+  via the editor.
+- **Tables:** `rowspan`, header repeat on long tables.
+- **Persisted cookies**, sealed in the [`vault`](vault.md).
+
+Naming note: the planned forensics tool that reads *other* browsers'
+history and cookies keeps the name `browser` (see File & data
+forensics above).
+
+### New category — Workspace
+
+**`edit` — documented 2026-11-23 as [`edit`](edit.md).** The built-in
+tabbed editor with a lazily-listed, inotify-watched project tree (git
+markers, freedesktop trash, run / terminal-here / ask-ai actions) and
+incremental regex syntax highlighting for ~20 file types.
+
+Next:
+- **`^P` fuzzy go-to-file** across the tree root.
+- **Drag-and-drop moves**, dim `.gitignore`d entries, remember the
+  tree's root and expansion across restarts.
+- **Run configs** — a per-project run command on `F9`.
+- **Highlighting:** `$x` / `${…}` inside strings, `<script>`/`<style>`
+  inside HTML, bracket matching.
+
 ### New category — Offensive tooling (lower priority)
 
 A separate category for the dual-use tools where the authorized-testing
